@@ -35,59 +35,43 @@ public:
     //LeetCode: Two Sum
     vector<int> twoSum(const vector<int>& nums, int target)
     {
-        std::unordered_map<int, int> m;
-        vector<int>ans;
-        for (int i = 0; i < nums.size(); i++) {
-            m[nums[i]] = i;
-        }
-
-        int v1 = 0;
-        //[3,2,4], target = 6, answer is [1,2]
-        while (v1 < nums.size())
-        {
-            int val2 = target - nums[v1]; //3
-            int v2 = m[val2]; //0
-            if (v2 && v2 != v1) {
-                ans.push_back(v1);
-                ans.push_back(v2);
+        const int size = nums.size();
+        for (size_t i = 0; i < size; i++)
+            for (size_t j = i+1; j < size; j++)
+            {
+                if (nums[i] + nums[j] == target)
+                    return std::vector<int> {(int)i, (int)j};
             }
-            if (ans.size() > 0)
-                break;
-            v1++;
-        }
-        return ans;
+
+        return vector<int>{-1,-1};
     }
 
     //LeetCode: Plus One
     vector<int> plusOne(vector<int>&& digits) {
-        // 495999
-        bool wave = false;
-        for (auto el = digits.rbegin(); el < digits.rend(); el++)
+       // 495999
+        // 123
+        // 9 -> 10
+        // 99
+        size_t size = v.size();
+        for (int i = size-1; 0 <= i; i--)
         {
-            if (*el == 9 && wave == false)
-            {
-                *el = 0;
-                wave = true;
-                continue;
-            }
+            if (i == size-1)
+                v[i]++;
 
-            if (*el == 9 && wave == true)
+            if (v[i] == 10)
             {
-                *el = 0;
-                continue;
-            }
+                v[i] = 0;
+                if (i != 0)
+                    v[i - 1]++;
+                else //if i == 0
+                {
+                    v.push_back(0);
+                    v[0] = 1;
+                }
 
-            if (*el != 9 && wave == true)
-            {
-                *el++;
-                wave = false;
             }
-
-            return digits;
         }
-
-    }
-
+        return v;
 };
 
 using namespace std;
@@ -126,6 +110,46 @@ void run_case(int test_case)
 
     for (auto& rows : grid)
         std::cout << rows << std::endl;
+}
+
+//Wikipedia(ru): Vector(C++) 
+void vectorMatrix()
+{
+    mtrx m(COLUMNS, std::vector<int>(ROWS));
+    
+        unsigned i = 0;
+        for (std::vector<std::vector<int>>::iterator iterV1 = m.begin(); iterV1 < m.end(); iterV1++)
+            {
+                i = 0;
+                for (std::vector<int>::iterator iterV2 = (*iterV1).begin(); iterV2 < (*iterV1).end(); iterV2++, i++)
+                {
+                    (*iterV2) = i;
+                }
+            }
+    
+        for (std::vector<std::vector<int>>::iterator v1 = m.begin(); v1 < m.end(); v1++)
+            {
+                std::cout << std::endl;
+                for (std::vector<int>::iterator v2 = (*v1).begin(); v2 < (*v1).end(); v2++)
+                std::cout << *v2 << std::endl;
+            }
+    
+        m.pop_back();
+        m.erase(m.begin());
+    
+        for (std::vector<std::vector<int>>::iterator v1 = m.begin(); v1 < m.end(); v1++)
+        {
+            (*v1).pop_back();
+            (*v1).erase((*v1).begin());
+        }
+    
+        std::cout << "\n===============\n";
+        for (std::vector<std::vector<int>>::iterator v1 = m.begin(); v1 < m.end(); v1++)
+            {
+                std::cout << std::endl;
+                for (std::vector<int>::iterator v2 = (*v1).begin(); v2 < (*v1).end(); v2++)
+                std::cout << *v2 << std::endl;
+            }
 }
 
 int main(int argc, char *argv[]) {
